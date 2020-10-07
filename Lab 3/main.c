@@ -12,6 +12,9 @@ void GetAverageFromFile(char* out){
   while(!feof(fp)) fgets(tmp, 1024, fp);
   fclose(fp);
   
+  //only continue if the last line starts with "rtt ", this is the line with the data we want
+  if (strncmp("rtt ", tmp, 4) != 0) return;
+  
   //Get the substring containing the average
   char* p = strtok (tmp,"//");
   int i = 0;
