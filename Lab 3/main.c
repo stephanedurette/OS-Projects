@@ -2,6 +2,17 @@
 #include <string.h>
 #include <stdio.h>
 
+GtkApplication *app;
+
+void showWindow(){
+  GtkWidget *window;
+  window = gtk_application_window_new (app);
+  gtk_window_set_title (GTK_WINDOW (window), "Average Ping Response");
+  gtk_window_set_default_size (GTK_WINDOW (window), 250, 50);
+  gtk_widget_show_all(window);
+  
+}
+
 void ping(GtkWidget *pingButton, GtkWidget *ipNumbers[]){
 
 	char buffer[255];
@@ -19,7 +30,7 @@ void ping(GtkWidget *pingButton, GtkWidget *ipNumbers[]){
 	printf("%s",buffer);
 
 	system(buffer);
-
+	showWindow();
 	return;
 }
 
@@ -32,6 +43,7 @@ static void activate(GtkApplication* app, gpointer user_data)
 	GtkWidget *ipNumbers[5];
 	GtkWidget *ipLabel, *pingCountLabel;
 	GtkWidget *pingButton;
+	
 	
 	//Set up the window
 	window = gtk_application_window_new(app);
@@ -88,8 +100,6 @@ static void activate(GtkApplication* app, gpointer user_data)
 
 
 int main(int argc, char **argv){
-
-	GtkApplication *app;
 
 	int status;
 	
