@@ -36,7 +36,7 @@ void showWindow(){
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 150);
   gtk_widget_show_all(window);
   
-  char buf[256];
+  char buf[256] = "Something went wrong";
   GetAverageFromFile(buf);
   
   ipLabel = gtk_label_new(buf);
