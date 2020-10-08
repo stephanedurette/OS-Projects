@@ -1,3 +1,5 @@
+# makefile template found at
+# http://nuclear.mutantstargoat.com/articles/make/
 
 src = $(wildcard *.c)
 obj = $(src:.c=.o)
