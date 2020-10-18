@@ -6,8 +6,7 @@
 /*  LAB3 execlp-launcher.c 
 *   This program launches the L3exe program using the execlp function.
 *   The execl function is a member of the exec function family. It replaces the
-*   the current process image with a new process image. Therefore after execl is
-*   called the current process is ended and the new one takes its place.
+*   the current process image with a new process image. 
 *
 *   For arguments it takes in the file name which it will look for in PATH. If not in PATH the files full
 *   directory path and name can also be used. The function then take in a null terminated list of arguments.
