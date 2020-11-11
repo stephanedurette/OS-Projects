@@ -57,8 +57,8 @@ int main(int argc, char *argv[])
 	memset (&clientMachine, 0, sizeof (clientMachine));
 
 	serverMachine.sin_family = AF_INET;
-	serverMachine.sin_addr.s_addr = htonl (INADDR_ANY);
-	serverMachine.sin_port = htons (udpPort);
+	serverMachine.sin_addr.s_addr = htonl(INADDR_ANY);
+	serverMachine.sin_port = htons(udpPort);
 
 	// bind the socket structure to the socket
 	// to establish our server
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 		printf ("Error: can't bind\n");
 		return 3;
 	}	/* endif */
-
+	printf ("ip: %X\n", serverMachine.sin_addr.s_addr);
 	while (1) {
 		// get an incoming message. Note the use of
 		// recvfrom() which will allow us to obtain the
@@ -84,11 +84,10 @@ int main(int argc, char *argv[])
 		if (size < 0) {
 			printf ("Error: recvfrom failure\n");
 			return 4;
-		}	/* endif */
+		}	
 
 		// for diagnostics, output visually the message the server got,
 		// and for grins, uppercase the string on the return path
-
 		printf ("ip: %X\n", clientMachine.sin_addr.s_addr);
 		printf ("ClientLength: %d size: %d Message received: %s\n", clientLength, size, input);
 		//strupr(input);
@@ -101,10 +100,8 @@ int main(int argc, char *argv[])
 		if (status < 0) {
 			printf ("Error: sendto error\n");
 			return 5;
-		}	/* endif */
-	}	/* end while loop */
-
-	/* as a server, this should never be reached */
+		}	
+	}	
 
 	return 0;
 }

@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 
 	printf ("Enter server IP address: ");
 	fgets(ip, 256, stdin);
-	if ((host = gethostbyname (ip)) == NULL) {
+	if ((host = gethostbyname(ip)) == NULL) {
 		printf ("Error: can't get host information!\n");
 		return 1;
 	}	/* endif */
