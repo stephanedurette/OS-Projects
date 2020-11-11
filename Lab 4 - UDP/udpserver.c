@@ -89,9 +89,9 @@ int main(int argc, char *argv[])
 		// for diagnostics, output visually the message the server got,
 		// and for grins, uppercase the string on the return path
 
-		printf ("ip: %lX\n", clientMachine.sin_addr.s_addr);
+		printf ("ip: %X\n", clientMachine.sin_addr.s_addr);
 		printf ("ClientLength: %d size: %d Message received: %s\n", clientLength, size, input);
-		strupr (input);
+		//strupr(input);
 
 		// just echo the message back to client machine for this example
 

@@ -45,18 +45,18 @@ int main(int argc, char *argv[])
 	// proceeding.
 
 	printf ("Enter server IP address: ");
-	gets (ip);
+	fgets(ip, 256, stdin);
 	if ((host = gethostbyname (ip)) == NULL) {
 		printf ("Error: can't get host information!\n");
 		return 1;
 	}	/* endif */
 
 	printf ("Enter server port number: ");
-	gets(input);
+	fgets(input, 256, stdin);
 	udpPort = atoi (input);
 
 	printf ("Enter a string to send to server: ");
-	gets (input);
+	fgets(input, 256, stdin);
 	
 	// allocate a socket
 
