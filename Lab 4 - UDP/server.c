@@ -157,15 +157,15 @@ main (int argc, char *argv[])
 					len = strlen (buffer);
 				}	/* endif */
 			} else if (startsWith(buffer, "who")) {
-				printf("[Who] command requested\n");
+				printf("[Who] command requested from %d\n", client_addr.sin_addr.s_addr);
 				strcpy(buffer, "INFO72220");
 				len = strlen(buffer);
 			} else if (startsWith(buffer, "where")) {
-				printf("[Where] command requested\n");
+				printf("[Where] command requested from %d\n", client_addr.sin_addr.s_addr);
 				strcpy(buffer, "Cambridge");
 				len = strlen(buffer);
 			} else if (startsWith(buffer, "exit")) {
-				printf("[Exit] command requested\n");
+				printf("[Exit] command requested from %d\n", client_addr.sin_addr.s_addr);
             			kill(getppid(), SIGKILL);	
 				close (client_socket);
 				exit(0);
