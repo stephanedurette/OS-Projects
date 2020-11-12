@@ -17,7 +17,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
-char buffer[BUFSIZ];
+char buffer[512];
 
 int
 main (int argc, char *argv[])
@@ -68,28 +68,66 @@ main (int argc, char *argv[])
 	 * now that we have a connection, get a commandline from
 	 * the user, and fire it off to the server
 	 */
-
-	printf ("Enter a command [date | who | df ]: ");
-	fflush (stdout);
-	fgets (buffer, sizeof (buffer), stdin);
-	if (buffer[strlen (buffer) - 1] == '\n')
-		buffer[strlen (buffer) - 1] = '\0';
-
-	write (client_socket, buffer, strlen (buffer));
-
-	len = read (client_socket, buffer, sizeof (buffer));
-
-	printf ("Result of command:\n%s\n\n", buffer);
-
-	/*
-	 * cleanup
-	 */
-
-	close (client_socket);
-	printf ("Client is finished\n");
+	while(1){
+		system("clear");
+		printf ("Select an Option:\n");
+		printf ("1: [Who] command\n");
+		printf ("2: [When] command\n");
+		printf ("3: [Where] command\n");
+		printf ("4: Display help information\n");
+		printf ("5: Exit\n");
+		printf ("Selection: ");
+		fflush (stdout);
+		fflush (stdin);
+		memset(buffer,0,strlen(buffer));
+		char* input = fgets(buffer, 512, stdin);
+		int optionNumber = atoi(input);
+		switch(optionNumber){
+			case 1:
+				strcpy(buffer, "who\0");
+				write (client_socket, buffer, strlen (buffer));
+				printf("%s\n", buffer);
+				len = read (client_socket, buffer, sizeof (buffer));
+				printf ("Result of command:\n%s\n\n", buffer);
+				break;
+			case 2:
+				strcpy(buffer, "when\0");
+				write (client_socket, buffer, strlen (buffer));
+				len = read (client_socket, buffer, sizeof (buffer));
+				printf ("Result of command:\n%s\n\n", buffer);
+				break;
+			case 3:
+				strcpy(buffer, "where\0");
+				write (client_socket, buffer, strlen (buffer));
+				len = read (client_socket, buffer, sizeof (buffer));
+				printf ("Result of command:\n%s\n\n", buffer);
+				break;
+			case 4:
+				system("clear");
+				printf ("Option Results:\n");
+				printf ("1: [Who] command: returns 'INFO72220' from the server\n");
+				printf ("2: [When] command: returns the current time from the server\n");
+				printf ("3: [Where] command: returns 'Cambridge' from the server\n");
+				printf ("4: Displays help information\n");
+				printf ("5: Closes the server and exits the program\n");
+				break;
+			case 5:
+				strcpy(buffer, "exit\0");
+				write (client_socket, buffer, strlen (buffer));
+				close (client_socket);
+				exit(0);
+				break;
+			default:
+				break;
+		}
+		
+		printf("\nPress [Enter] to continue\n");
+		char f[512];
+		fgets(f, 512, stdin);
+	}
 
 	return 0;
-}	/* end main */
+}
 
 
 

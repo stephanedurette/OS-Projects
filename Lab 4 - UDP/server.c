@@ -21,7 +21,7 @@
 
 #define PORT 5000
 
-char buffer[BUFSIZ];
+char buffer[512];
 
 
 /*
@@ -121,43 +121,42 @@ main (int argc, char *argv[])
 		 */
 
 		if (fork() == 0) {
+			while(1){
 			/*
 			 * this is done by CHILD ONLY!
 			 *
 			 * read a block of info max BUFSIZE. compare 
-			 * against 3 commands: date, who, df
+			 * against 3 commands: who, when, where
 			 */
 
 			read (client_socket, buffer, BUFSIZ);
-
+			printf("%s\n", buffer);
 			/*
 			 * process command, and obtain outgoing data
 			 */
 
-			if (strcmp (buffer, "date") == 0) {
+			if (strcmp (buffer, "when") == 0) {
+				printf("[When] command requested\n");
 				if (len = (p = popen ("date", "r")) != NULL) {
 					len = fread (buffer, 1, sizeof (buffer), p);
 					pclose (p);
 				} else {
-					strcpy (buffer, "Can't run date command\n");
+					strcpy (buffer, "Can't when command\n");
 					len = strlen (buffer);
 				}	/* endif */
 			} else if (strcmp (buffer, "who") == 0) {
-				if (len = (p = popen ("who", "r")) != NULL) {
-					len = fread (buffer, 1, sizeof (buffer), p);
-					pclose (p);
-				} else {
-					strcpy (buffer, "Can't run who command\n");
-					len = strlen (buffer);
-				}	/* endif */
-			} else if (strcmp (buffer, "df") == 0) {
-				if (len = (p = popen ("df", "r")) != NULL) {
-					len = fread (buffer, 1, sizeof (buffer), p);
-					pclose (p);
-				} else {
-					strcpy (buffer, "Can't run df command\n");
-					len = strlen (buffer);
-				}	/* endif */
+				printf("[Who] command requested\n");
+				strcpy(buffer, "INFO72220");
+				len = strlen(buffer);
+			} else if (strcmp (buffer, "where") == 0) {
+				printf("[Where] command requested\n");
+				strcpy(buffer, "Cambridge");
+				len = strlen(buffer);
+			} else if (strcmp (buffer, "exit") == 0) {
+				printf("[Exit] command requested\n");
+				close (client_socket);
+				exit(0);
+				return 0;
 			} else {
 				strcpy (buffer, "invalid command\n");
 				len = strlen (buffer);
@@ -168,8 +167,9 @@ main (int argc, char *argv[])
 			 */
 
 			write (client_socket, buffer, len);
-			close (client_socket);
-			return 0;
+			//close (client_socket);
+			}
+			//return 0;
 		} else {
 			/*
 			 * this is done by parent ONLY
