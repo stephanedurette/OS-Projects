@@ -39,6 +39,19 @@ SigCatcher (int n)
 	signal (SIGCHLD, SigCatcher);
 }
 
+int startsWith(char* buffer, const char* string){
+	int i = 0;
+	while(string[i] != '\0'){
+		if(!(string[i] == buffer[i])) return 0;
+		i++;
+	}
+	return 1;
+	//int i = 0;
+	//while(string[i] != '\0') i++;
+	//buffer[i + 1] = '\0';
+	//return (strcmp (buffer, string) == 0);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -130,12 +143,11 @@ main (int argc, char *argv[])
 			 */
 
 			read (client_socket, buffer, BUFSIZ);
-			printf("%s\n", buffer);
 			/*
 			 * process command, and obtain outgoing data
 			 */
 
-			if (strcmp (buffer, "when") == 0) {
+			if (startsWith(buffer, "when")) {
 				printf("[When] command requested\n");
 				if (len = (p = popen ("date", "r")) != NULL) {
 					len = fread (buffer, 1, sizeof (buffer), p);
@@ -144,16 +156,17 @@ main (int argc, char *argv[])
 					strcpy (buffer, "Can't when command\n");
 					len = strlen (buffer);
 				}	/* endif */
-			} else if (strcmp (buffer, "who") == 0) {
+			} else if (startsWith(buffer, "who")) {
 				printf("[Who] command requested\n");
 				strcpy(buffer, "INFO72220");
 				len = strlen(buffer);
-			} else if (strcmp (buffer, "where") == 0) {
+			} else if (startsWith(buffer, "where")) {
 				printf("[Where] command requested\n");
 				strcpy(buffer, "Cambridge");
 				len = strlen(buffer);
-			} else if (strcmp (buffer, "exit") == 0) {
+			} else if (startsWith(buffer, "exit")) {
 				printf("[Exit] command requested\n");
+            			kill(getppid(), SIGKILL);	
 				close (client_socket);
 				exit(0);
 				return 0;

@@ -79,28 +79,28 @@ main (int argc, char *argv[])
 		printf ("Selection: ");
 		fflush (stdout);
 		fflush (stdin);
-		memset(buffer,0,strlen(buffer));
+		memset(buffer,0,512);
 		char* input = fgets(buffer, 512, stdin);
 		int optionNumber = atoi(input);
 		switch(optionNumber){
 			case 1:
 				strcpy(buffer, "who\0");
-				write (client_socket, buffer, strlen (buffer));
-				printf("%s\n", buffer);
+				write (client_socket, buffer, 512);
+				
 				len = read (client_socket, buffer, sizeof (buffer));
-				printf ("Result of command:\n%s\n\n", buffer);
+				printf ("\nResult of command:\n%s\n\n", buffer);
 				break;
 			case 2:
 				strcpy(buffer, "when\0");
-				write (client_socket, buffer, strlen (buffer));
+				write (client_socket, buffer, 512);
 				len = read (client_socket, buffer, sizeof (buffer));
-				printf ("Result of command:\n%s\n\n", buffer);
+				printf ("\nResult of command:\n%s\n\n", buffer);
 				break;
 			case 3:
 				strcpy(buffer, "where\0");
-				write (client_socket, buffer, strlen (buffer));
+				write (client_socket, buffer, 512);
 				len = read (client_socket, buffer, sizeof (buffer));
-				printf ("Result of command:\n%s\n\n", buffer);
+				printf ("\nResult of command:\n%s\n\n", buffer);
 				break;
 			case 4:
 				system("clear");
@@ -113,7 +113,7 @@ main (int argc, char *argv[])
 				break;
 			case 5:
 				strcpy(buffer, "exit\0");
-				write (client_socket, buffer, strlen (buffer));
+				write (client_socket, buffer, 512);
 				close (client_socket);
 				exit(0);
 				break;
