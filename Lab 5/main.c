@@ -4,16 +4,17 @@
 #include <string.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <semaphore.h>
 
 pthread_t subjectThread;
 
 static int subjectData = -1;
 static int numberConsumed = 0xF;	//each new subjectData can only be consumed once per thread, represented by a 4 bit number, 1 bit per observer thread
 
+sem_t mutex;
+
 pthread_t observerThreads[4];
 int observerDivisors[4] = {3, 5, 7, 25};
-
-pthread_mutex_t lock;
 
 //Run forever, update the global "subjectData" number when the random number is divisible by 5
 void *subjectFunction(void *arg){
@@ -23,12 +24,13 @@ void *subjectFunction(void *arg){
 		int randNum = rand() % 1000 + 1; // 1 <= randNum <= 1000
 		if (randNum % 5 != 0) continue;
 		
-		pthread_mutex_lock(&lock); 	//begin critical region
+		sem_wait(&mutex);
 		
 		subjectData = randNum;
 		numberConsumed = 0;		//this new number has not been consumed
 		
-		pthread_mutex_unlock(&lock);	//end critical region
+		sem_post(&mutex);
+		
 	}
 	return NULL;
 }
@@ -42,13 +44,13 @@ void *observerFunction(void *arg){
 	int count = 0;
 	while(count < 3){
 		if (subjectData % divisor == 0 && !(numberConsumed & observerBit)){	//if the number has not been consumed by this thread and it's a valid output
+			
+			sem_wait(&mutex);
+			
 			printf("Observer: %d\tNumber: %d\tDivisor: %d\tProduct: %d\n", observerID, subjectData, divisor, subjectData / divisor);
-			
-			pthread_mutex_lock(&lock); 			//begin critical region
-			
 			numberConsumed |= observerBit;		//the new number has been consumed by this thread
 			
-			pthread_mutex_unlock(&lock);			//end critical region
+			sem_post(&mutex);
 			
 			count++;
 		}
@@ -57,11 +59,8 @@ void *observerFunction(void *arg){
 }
 
 int main(int argc, char **argv){
-	//Init mutex lock
-	if (pthread_mutex_init(&lock, NULL) != 0){
-		printf("mutex init failed\n");
-		return 1;
-	}
+	//init semaphore
+	sem_init(&mutex, 0, 1);
 	
 	//Create subject thread -> subjectFunction
 	if(pthread_create(&subjectThread, NULL, &subjectFunction, NULL) != 0){

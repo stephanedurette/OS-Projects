@@ -4,7 +4,7 @@
 src = $(wildcard *.c)
 obj = $(src:.c=.o)
 
-LDFLAGS = -lGL -lpng -lz -lm
+LDFLAGS = -lGL -lpng -lz -lm -lpthread -lrt
 
 myprog: $(obj)
 	$(CC) -pthread -o $@ $^ $(LDFLAGS)
